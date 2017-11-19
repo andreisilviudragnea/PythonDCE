@@ -1,2 +1,2 @@
 # PythonDCE
-Pycharm Plugin useful for detecting potentially dead code
+Pycharm Plugin useful for detecting potentially dead code in Python
