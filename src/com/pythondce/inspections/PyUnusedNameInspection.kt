@@ -10,15 +10,10 @@ import com.jetbrains.python.inspections.PyInspection
 import com.jetbrains.python.inspections.PyInspectionVisitor
 import com.jetbrains.python.inspections.quickfix.PyRemoveStatementQuickFix
 import com.jetbrains.python.psi.PyAssignmentStatement
-import com.jetbrains.python.psi.PyClass
-import com.jetbrains.python.psi.PyStatementList
 import com.jetbrains.python.psi.PyTargetExpression
 
 private fun PyTargetExpression.isGlobalAssignment(): Boolean = parent is PyAssignmentStatement
     && parent.parent is PsiFile
-
-private fun PyTargetExpression.isClassAssignment(): Boolean = parent is PyAssignmentStatement
-    && parent.parent is PyStatementList && parent.parent.parent is PyClass
 
 class PyUnusedNameInspection : PyInspection() {
   override fun getDisplayName(): String = PythonDCEBundle.message("INSP.NAME.unused.name")
@@ -28,7 +23,7 @@ class PyUnusedNameInspection : PyInspection() {
         override fun visitPyTargetExpression(node: PyTargetExpression?) {
           node ?: return
           if (PyNames.SLOTS != node.name && (node.isGlobalAssignment() || node.isClassAssignment())
-              && node.numberOfUsages() == 1) {
+              && node.usages().size == 1) {
             holder.registerProblem(node.nameIdentifier ?: return,
                 PythonDCEBundle.message("INSP.unused.name"), ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
                 PyRemoveStatementQuickFix())
