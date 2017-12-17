@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.pythondce</id>
     <name>PythonDCE</name>
-    <version>0.1</version>
+    <version>0.2</version>
     <vendor email="andreisilviudragnea@gmail.com" url="https://github.com/andreisilviudragnea/PythonDCE">Andrei Silviu
         Dragnea
     </vendor>
