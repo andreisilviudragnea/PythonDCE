@@ -1,0 +1,7 @@
+class C:
+    a = 5
+    b = 6
+
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b

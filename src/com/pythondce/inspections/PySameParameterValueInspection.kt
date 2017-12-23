@@ -1,6 +1,5 @@
 package com.pythondce.inspections
 
-import com.intellij.CommonBundle
 import com.intellij.codeInspection.LocalInspectionToolSession
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
@@ -11,6 +10,7 @@ import com.jetbrains.python.psi.PyFunction
 import com.jetbrains.python.psi.PyLiteralExpression
 import com.jetbrains.python.psi.types.PyCallableParameter
 import com.pythondce.inspections.quickfix.PyParameterToLocalQuickFix
+import com.pythondce.util.PythonDCEBundle
 
 private fun PyFunction.calls(): List<PyCallExpression> = usages().map { it.element.parent }.filterIsInstance<PyCallExpression>()
 
@@ -41,8 +41,7 @@ class PySameParameterValueInspection : PyInspection() {
               val parameterName = entry.key.parameter?.name ?: return
               val constant = entry.value.elementAt(0)
               registerProblem(entry.key.parameter,
-                  CommonBundle.message(PythonDCEBundle.bundle, "inspection.same.parameter.problem.descriptor",
-                      parameterName, constant),
+                  PythonDCEBundle.message("inspection.same.parameter.problem.descriptor", parameterName, constant),
                   PyParameterToLocalQuickFix(parameterName, constant))
             }
       }

@@ -5,7 +5,7 @@ import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.openapi.project.Project
 import com.jetbrains.python.psi.*
-import com.pythondce.inspections.PythonDCEBundle
+import com.pythondce.util.PythonDCEBundle
 
 class PyParameterToLocalQuickFix(private val parameterName: String, private val constant: String) : LocalQuickFix {
   override fun getFamilyName(): String = PythonDCEBundle.message("inspection.same.parameter.fix.family.name")

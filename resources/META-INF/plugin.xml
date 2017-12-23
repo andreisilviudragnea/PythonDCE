@@ -1,14 +1,13 @@
 <idea-plugin>
     <id>com.pythondce</id>
-    <name>PythonDCE</name>
-    <version>0.2</version>
-    <vendor email="andreisilviudragnea@gmail.com" url="https://github.com/andreisilviudragnea/PythonDCE">Andrei Silviu
-        Dragnea
+    <name>Pycharm Enhancements</name>
+    <version>0.2.1</version>
+    <vendor email="andreisilviudragnea@gmail.com" url="https://github.com/andreisilviudragnea/PythonDCE">
+        Andrei Silviu Dragnea
     </vendor>
 
     <description><![CDATA[
-      This plugin adds inspections useful for detecting potential dead code in Python. They are experimental and
-      inefficient.
+      This plugin adds inspections for detecting potentially dead code and intentions for generating boilerplate code.
     ]]></description>
 
     <change-notes><![CDATA[
@@ -16,7 +15,6 @@
     ]]>
     </change-notes>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="173.0"/>
 
     <depends>com.intellij.modules.python</depends>
@@ -35,9 +33,9 @@
         <localInspection language="Python" shortName="PyUnusedNameInspection" suppressId="PyUnusedName"
                          displayName="Unused name" groupName="Python" enabledByDefault="true" level="WARNING"
                          implementationClass="com.pythondce.inspections.PyUnusedNameInspection"/>
+        <intentionAction>
+            <className>com.pythondce.intentions.PyGenerateInitIntention</className>
+            <category>Python</category>
+        </intentionAction>
     </extensions>
-
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
 </idea-plugin>
