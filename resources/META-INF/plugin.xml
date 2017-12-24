@@ -1,17 +1,18 @@
 <idea-plugin>
     <id>com.pythondce</id>
-    <name>Pycharm Enhancements</name>
+    <name>Python Enhancements</name>
     <version>0.2.1</version>
     <vendor email="andreisilviudragnea@gmail.com" url="https://github.com/andreisilviudragnea/PythonDCE">
         Andrei Silviu Dragnea
     </vendor>
 
     <description><![CDATA[
-      This plugin adds inspections for detecting potentially dead code and intentions for generating boilerplate code.
+      Inspections for detecting potentially dead code and intentions for generating boilerplate code.
     ]]></description>
 
     <change-notes><![CDATA[
-      Initial release.
+      Added options to ignore test classes and test functions (methods).
+      Added an intention which generates the <code>__init__</code> method from class variables.
     ]]>
     </change-notes>
 
