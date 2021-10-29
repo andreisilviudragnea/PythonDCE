@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.pythondce</id>
     <name>Python Enhancements</name>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
     <vendor email="andreisilviudragnea@gmail.com" url="https://github.com/andreisilviudragnea/PythonDCE">
         Andrei Silviu Dragnea
     </vendor>
@@ -10,13 +10,7 @@
       Inspections for detecting potentially dead code and intentions for generating boilerplate code.
     ]]></description>
 
-    <change-notes><![CDATA[
-      Added options to ignore test classes and test functions (methods).
-      Added an intention which generates the <code>__init__</code> method from class variables.
-    ]]>
-    </change-notes>
-
-    <idea-version since-build="173.0"/>
+    <idea-version since-build="212.0"/>
 
     <depends>com.intellij.modules.python</depends>
 
