@@ -11,7 +11,7 @@ import com.jetbrains.python.inspections.PyInspectionVisitor
 import com.jetbrains.python.psi.PyClass
 import com.pythondce.inspections.quickfix.PyRemoveClassQuickFix
 import com.pythondce.util.PythonDCEBundle
-import java.util.*
+import java.util.Locale
 import javax.swing.JComponent
 
 private fun PyClass.hasAtLeastOneUsage() =

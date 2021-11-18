@@ -13,7 +13,7 @@ import com.jetbrains.python.psi.search.PySuperMethodsSearch
 import com.jetbrains.python.psi.types.TypeEvalContext
 import com.pythondce.inspections.quickfix.PyRemoveFunctionQuickFix
 import com.pythondce.util.PythonDCEBundle
-import java.util.*
+import java.util.Locale
 import javax.swing.JComponent
 
 private fun PyFunction.hasAtLeastOneUsage(): Boolean = hasOneUsage() ||
