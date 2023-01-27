@@ -27,7 +27,7 @@ class PyUnusedClassInspection : PyInspection() {
         isOnTheFly: Boolean,
         session: LocalInspectionToolSession
     ): PsiElementVisitor =
-        object : PyInspectionVisitor(holder, session) {
+        object : PyInspectionVisitor(holder, getContext(session)) {
             override fun visitPyClass(node: PyClass) {
                 val name = node.name ?: return
                 if (ignoreTestClasses && name.lowercase(Locale.getDefault()).contains("test")) {

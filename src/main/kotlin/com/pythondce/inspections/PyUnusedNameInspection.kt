@@ -24,7 +24,7 @@ class PyUnusedNameInspection : PyInspection() {
         isOnTheFly: Boolean,
         session: LocalInspectionToolSession
     ): PsiElementVisitor =
-        object : PyInspectionVisitor(holder, session) {
+        object : PyInspectionVisitor(holder, getContext(session)) {
             override fun visitPyTargetExpression(node: PyTargetExpression) {
                 val name = node.name ?: return
                 if (PyNames.SLOTS == name || PyNames.ALL == name) {

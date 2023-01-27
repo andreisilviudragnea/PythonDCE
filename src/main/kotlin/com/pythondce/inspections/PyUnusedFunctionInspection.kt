@@ -5,9 +5,10 @@ import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel
 import com.intellij.psi.PsiElementVisitor
-import com.jetbrains.python.PyNames
+import com.jetbrains.python.PyNames.getBuiltinMethods
 import com.jetbrains.python.inspections.PyInspection
 import com.jetbrains.python.inspections.PyInspectionVisitor
+import com.jetbrains.python.psi.LanguageLevel
 import com.jetbrains.python.psi.PyFunction
 import com.jetbrains.python.psi.search.PySuperMethodsSearch
 import com.jetbrains.python.psi.types.TypeEvalContext
@@ -30,13 +31,13 @@ class PyUnusedFunctionInspection : PyInspection() {
         isOnTheFly: Boolean,
         session: LocalInspectionToolSession
     ): PsiElementVisitor =
-        object : PyInspectionVisitor(holder, session) {
+        object : PyInspectionVisitor(holder, getContext(session)) {
             override fun visitPyFunction(node: PyFunction) {
                 val name = node.name ?: return
                 if (ignoreTestFunctions && name.lowercase(Locale.getDefault()).contains("test")) {
                     return
                 }
-                if (PyNames.PY36_BUILTIN_METHODS.containsKey(name)) {
+                if (getBuiltinMethods(LanguageLevel.PYTHON36).containsKey(name)) {
                     return
                 }
                 if (node.hasAtLeastOneUsage()) {

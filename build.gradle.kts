@@ -6,30 +6,30 @@ plugins {
 }
 
 group = "io.dragnea"
-version = "0.3.0"
+version = "0.4.0"
 
 intellij {
-    version.set("IC-2021.2.3")
+    version.set("IC-2022.3.2")
 
-    plugins.set(listOf("PythonCore:212.5457.59"))
+    plugins.set(listOf("PythonCore:223.8617.56"))
 
     updateSinceUntilBuild.set(false)
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 tasks {
     compileKotlin {
         kotlinOptions {
-            jvmTarget = "11"
+            jvmTarget = "17"
             allWarningsAsErrors = true
         }
     }
     compileTestKotlin {
         kotlinOptions {
-            jvmTarget = "11"
+            jvmTarget = "17"
             allWarningsAsErrors = true
         }
     }
@@ -48,9 +48,4 @@ tasks {
 
 repositories {
     mavenCentral()
-}
-
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
 }

@@ -25,7 +25,7 @@ class PySameParameterValueInspection : PyInspection() {
         isOnTheFly: Boolean,
         session: LocalInspectionToolSession
     ): PsiElementVisitor {
-        return object : PyInspectionVisitor(holder, session) {
+        return object : PyInspectionVisitor(holder, getContext(session)) {
             override fun visitPyFunction(node: PyFunction) {
                 val parametersToArgumentValues: MutableMap<PyCallableParameter, MutableSet<String>> = HashMap()
                 for (call in node.calls()) {
@@ -34,7 +34,7 @@ class PySameParameterValueInspection : PyInspection() {
                         .forEach { entries ->
                             entries.forEach { entry ->
                                 parametersToArgumentValues
-                                    .getOrPut(entry.value, { HashSet() })
+                                    .getOrPut(entry.value) { HashSet() }
                                     .add(if (entry.key is PyLiteralExpression) entry.key.text else NOT_CONSTANT)
                             }
                         }

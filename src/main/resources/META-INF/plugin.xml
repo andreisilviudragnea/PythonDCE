@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.pythondce</id>
     <name>Python Enhancements</name>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <vendor email="andreisilviudragnea@gmail.com" url="https://github.com/andreisilviudragnea/PythonDCE">
         Andrei Silviu Dragnea
     </vendor>
@@ -10,7 +10,7 @@
       Inspections for detecting potentially dead code and intentions for generating boilerplate code.
     ]]></description>
 
-    <idea-version since-build="212.0"/>
+    <idea-version since-build="223.0"/>
 
     <depends>com.intellij.modules.python</depends>
 
@@ -29,6 +29,7 @@
                          displayName="Unused name" groupName="Python" enabledByDefault="true" level="WARNING"
                          implementationClass="com.pythondce.inspections.PyUnusedNameInspection"/>
         <intentionAction>
+            <language>Python</language>
             <className>com.pythondce.intentions.PyGenerateInitIntention</className>
             <category>Python</category>
         </intentionAction>

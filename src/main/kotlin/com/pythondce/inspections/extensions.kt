@@ -19,8 +19,7 @@ internal fun PyTargetExpression.isClassAssignment(): Boolean = parent is PyAssig
 internal fun PsiReference.isUnqualifiedReferenceExpressionInMethodBlock(): Boolean {
     val referenceExpression = element as? PyReferenceExpression ?: return false
     if (referenceExpression.isQualified) return false
-    ScopeUtil.getScopeOwner(referenceExpression) as? PyFunction ?: return false
-    return true
+    return ScopeUtil.getScopeOwner(referenceExpression) is PyFunction
 }
 
 internal fun PyTargetExpression.filterOutUnqualifiedReferencesToNameDefinedInClassBlockFromMethodBlocks(
