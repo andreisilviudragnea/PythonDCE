@@ -11,7 +11,7 @@ version = "0.4.0"
 intellij {
     version.set("IC-2022.3.2")
 
-    plugins.set(listOf("PythonCore:223.8617.56"))
+    plugins.set(listOf("PythonCore:223.8617.56", "org.intellij.scala:2022.3.15", "com.intellij.java"))
 
     updateSinceUntilBuild.set(false)
 }

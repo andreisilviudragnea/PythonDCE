@@ -13,6 +13,8 @@
     <idea-version since-build="223.0"/>
 
     <depends>com.intellij.modules.python</depends>
+    <depends>org.intellij.scala</depends>
+    <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <localInspection language="Python" shortName="PySameParameterValueInspection" suppressId="PySameParameterValue"
@@ -28,6 +30,9 @@
         <localInspection language="Python" shortName="PyUnusedNameInspection" suppressId="PyUnusedName"
                          displayName="Unused name" groupName="Python" enabledByDefault="true" level="WARNING"
                          implementationClass="com.pythondce.inspections.PyUnusedNameInspection"/>
+        <localInspection language="" shortName="ElementWithOneUsageInspection" suppressId="ElementWithOneUsage"
+                         displayName="Element with one usage" groupName="Usages" enabledByDefault="true" level="WARNING"
+                         implementationClass="io.dragnea.usages.ElementWithOneUsageInspection"/>
         <intentionAction>
             <language>Python</language>
             <className>com.pythondce.intentions.PyGenerateInitIntention</className>
