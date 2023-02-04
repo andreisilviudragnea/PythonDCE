@@ -10,6 +10,7 @@ import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiTypeParameter
 import com.pythondce.inspections.usages
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.plugins.scala.lang.psi.api.base.patterns.ScPattern
 
 class ElementWithOneUsageInspection : LocalInspectionTool() {
@@ -22,6 +23,7 @@ class ElementWithOneUsageInspection : LocalInspectionTool() {
             if (element !is PsiNameIdentifierOwner) return
 
             element is PsiParameter && return
+            element is KtParameter && return // KtParameter is not PsiParameter
             element is PsiTypeParameter && return
 
             element is ScPattern && return
