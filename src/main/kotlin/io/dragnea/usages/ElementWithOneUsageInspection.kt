@@ -18,6 +18,10 @@ import org.jetbrains.plugins.scala.lang.psi.api.base.patterns.ScTypedPattern
 import org.jetbrains.plugins.scala.lang.psi.api.expr.ScGenerator
 import org.jetbrains.plugins.scala.lang.psi.api.statements.params.ScArguments
 import org.jetbrains.plugins.scala.lang.psi.api.toplevel.typedef.ScTrait
+import org.rust.lang.core.psi.RsMatchArm
+import org.rust.lang.core.psi.RsPatTup
+import org.rust.lang.core.psi.RsPatTupleStruct
+import org.rust.lang.core.psi.RsValueParameter
 
 class ElementWithOneUsageInspection : LocalInspectionTool() {
     override fun buildVisitor(
@@ -38,6 +42,11 @@ class ElementWithOneUsageInspection : LocalInspectionTool() {
             element is ScReferencePattern && element.parent is ScGenerator && return
             element is ScReferencePattern && element.parent is ScArguments && return
             element is ScNamingPattern && return
+
+            element.parent?.parent is RsValueParameter && return
+            element.parent?.parent is RsPatTupleStruct && return
+            element.parent?.parent is RsPatTup && return
+            element.parent?.parent is RsMatchArm && return
 
             if (element.usages().size == 1) {
                 holder.registerProblem(
