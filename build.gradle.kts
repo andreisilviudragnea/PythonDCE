@@ -11,7 +11,15 @@ version = "0.4.0"
 intellij {
     version.set("IC-2022.3.2")
 
-    plugins.set(listOf("PythonCore:223.8617.56", "org.intellij.scala:2022.3.15", "com.intellij.java", "org.jetbrains.kotlin"))
+    plugins.set(
+        listOf(
+            "PythonCore:223.8617.56",
+            "org.intellij.scala:2022.3.15",
+            "com.intellij.java",
+            "org.jetbrains.kotlin",
+            "org.rust.lang:0.4.187.5175-223"
+        )
+    )
 
     updateSinceUntilBuild.set(false)
 }

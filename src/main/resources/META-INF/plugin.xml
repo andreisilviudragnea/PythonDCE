@@ -16,6 +16,7 @@
     <depends>org.intellij.scala</depends>
     <depends>com.intellij.java</depends>
     <depends>org.jetbrains.kotlin</depends>
+    <depends>org.rust.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <localInspection language="Python" shortName="PySameParameterValueInspection" suppressId="PySameParameterValue"
