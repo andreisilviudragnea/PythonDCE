@@ -50,7 +50,7 @@ class ElementWithOneUsageInspection : LocalInspectionTool() {
 
             if (element.usages().size == 1) {
                 holder.registerProblem(
-                    element.nameIdentifier ?: return,
+                    element.nameIdentifier ?: return, // TODO: Fix isPhysical false
                     "Element has only one usage and can be inlined",
                     ProblemHighlightType.GENERIC_ERROR_OR_WARNING
                 )
