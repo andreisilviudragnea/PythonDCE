@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.13.0"
     java
     kotlin("jvm") version "1.8.10"
-    id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.2.0"
 }
 
 group = "io.dragnea"

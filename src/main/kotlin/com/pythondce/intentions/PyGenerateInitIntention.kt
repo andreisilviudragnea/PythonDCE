@@ -49,7 +49,8 @@ class PyGenerateInitIntention : PyBaseIntentionAction() {
 
     override fun doInvoke(project: Project, editor: Editor, file: PsiFile) {
         val pyClass = PsiTreeUtil.getParentOfType(
-            file.findElementAt(editor.caretModel.offset), PyClass::class.java,
+            file.findElementAt(editor.caretModel.offset),
+            PyClass::class.java,
             false
         ) ?: return
         val context = TypeEvalContext.userInitiated(file.project, file)
@@ -62,7 +63,8 @@ class PyGenerateInitIntention : PyBaseIntentionAction() {
         methodRows.addAll(classAttributesNamesAndTypes.map { "${PyNames.CANONICAL_SELF}.${it.first}: ${it.second} = ${it.first}" })
         val initMethod = PyElementGenerator.getInstance(project).createFromText(
             LanguageLevel.PYTHON36,
-            PyFunction::class.java, methodRows.joinToString(separator = "\n    ")
+            PyFunction::class.java,
+            methodRows.joinToString(separator = "\n    ")
         )
         pyClass.statementList.add(initMethod)
     }
