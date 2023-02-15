@@ -24,6 +24,12 @@ class JsonCodecInspection : LocalInspectionTool() {
                 val annotation =
                     element.annotations.find { it.hasQualifiedName("io.circe.generic.JsonCodec") } ?: return
 
+                val parameters = CollectionConverters.SeqHasAsJava(element.parameters()).asJava()
+
+                if (parameters.size > 22) {
+                    return
+                }
+
                 holder.registerProblem(
                     element.nameIdentifier ?: return, // TODO: Fix isPhysical false
                     "JsonCodec",
@@ -34,20 +40,18 @@ class JsonCodecInspection : LocalInspectionTool() {
                         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
                             annotation.delete()
 
-                            val parameters = CollectionConverters.SeqHasAsJava(element.parameters()).asJava()
-
                             val name = element.name
 
                             val tuple = if (parameters.size == 1) {
-                                "v." + parameters[0].name
+                                "v." + parameters[0].name()
                             } else {
                                 parameters.joinToString(
                                     prefix = "(",
                                     postfix = ")"
-                                ) { "v." + it.name }
+                                ) { "v." + it.name() }
                             }
 
-                            val arguments = parameters.joinToString { "\"${it.name}\"" }
+                            val arguments = parameters.joinToString { "\"${it.name()}\"" }
 
                             val companion = ScalaPsiElementFactory.createObjectWithContext(
                                 "object $name {\n implicit val ${name}Codec: io.circe.Codec.AsObject[$name] = io.circe.Codec.forProduct${parameters.size}($arguments)($name.apply)(v => $tuple) \n}",
