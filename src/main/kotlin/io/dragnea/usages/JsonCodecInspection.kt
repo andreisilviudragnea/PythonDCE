@@ -49,14 +49,22 @@ class JsonCodecInspection : LocalInspectionTool() {
 
                             val arguments = parameters.joinToString { "\"${it.name}\"" }
 
-                            element.parent.addAfter(
-                                ScalaPsiElementFactory.createObjectWithContext(
-                                    "object $name {\n implicit val ${name}Codec: io.circe.Codec.AsObject[$name] = io.circe.Codec.forProduct${parameters.size}($arguments)($name.apply)(v => $tuple) \n}",
-                                    element.context,
-                                    element
-                                ),
+                            val companion = ScalaPsiElementFactory.createObjectWithContext(
+                                "object $name {\n implicit val ${name}Codec: io.circe.Codec.AsObject[$name] = io.circe.Codec.forProduct${parameters.size}($arguments)($name.apply)(v => $tuple) \n}",
+                                element.context,
                                 element
                             )
+
+                            val baseCompanion = element.baseCompanion()
+                            if (baseCompanion.isEmpty) {
+                                element.parent.addAfter(companion, element)
+                            } else {
+                                val get = baseCompanion.get()
+                                get.addBefore(
+                                    CollectionConverters.SeqHasAsJava(companion.members()).asJava().first(),
+                                    CollectionConverters.SeqHasAsJava(get.members()).asJava().first()
+                                )
+                            }
                         }
                     }
                 )
