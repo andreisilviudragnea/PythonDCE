@@ -35,6 +35,9 @@
         <localInspection language="" shortName="ElementWithOneUsageInspection" suppressId="ElementWithOneUsage"
                          displayName="Element with one usage" groupName="Usages" enabledByDefault="true" level="WARNING"
                          implementationClass="io.dragnea.usages.ElementWithOneUsageInspection"/>
+        <localInspection language="Scala" shortName="JsonCodecInspection" suppressId="JsonCodec"
+                         displayName="JsonCodec" groupName="Usages" enabledByDefault="true" level="WARNING"
+                         implementationClass="io.dragnea.usages.JsonCodecInspection"/>
         <intentionAction>
             <language>Python</language>
             <className>com.pythondce.intentions.PyGenerateInitIntention</className>
