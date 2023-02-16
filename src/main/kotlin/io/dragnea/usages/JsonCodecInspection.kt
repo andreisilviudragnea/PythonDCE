@@ -9,7 +9,9 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
-import org.jetbrains.plugins.scala.lang.psi.api.toplevel.typedef.ScConstructorOwner
+import org.jetbrains.kotlin.lombok.utils.decapitalize
+import org.jetbrains.plugins.scala.lang.psi.api.statements.params.ScClassParameter
+import org.jetbrains.plugins.scala.lang.psi.api.toplevel.typedef.ScClass
 import org.jetbrains.plugins.scala.lang.psi.impl.ScalaPsiElementFactory
 import scala.jdk.CollectionConverters
 
@@ -20,7 +22,7 @@ class JsonCodecInspection : LocalInspectionTool() {
         session: LocalInspectionToolSession
     ): PsiElementVisitor = object : PsiElementVisitor() {
         override fun visitElement(element: PsiElement) {
-            if (element is ScConstructorOwner) {
+            if (element is ScClass) {
                 val annotation =
                     element.annotations.find { it.hasQualifiedName("io.circe.generic.JsonCodec") } ?: return
 
@@ -38,9 +40,7 @@ class JsonCodecInspection : LocalInspectionTool() {
                         override fun getFamilyName(): String = "JsonCodec"
 
                         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-                            annotation.delete()
-
-                            val name = element.name
+                            val name = element.name!!
 
                             val tuple = if (parameters.size == 1) {
                                 "v." + parameters[0].name()
@@ -51,24 +51,81 @@ class JsonCodecInspection : LocalInspectionTool() {
                                 ) { "v." + it.name() }
                             }
 
-                            val arguments = parameters.joinToString { "\"${it.name()}\"" }
+                            fun ScClassParameter.specialName(): String {
+                                val name1 = name()
+                                if (name1.startsWith("`")) {
+                                    return name1.substring(1, name1.length - 1)
+                                }
+                                return name1
+                            }
 
-                            val companion = ScalaPsiElementFactory.createObjectWithContext(
-                                "object $name {\n implicit val ${name}Codec: io.circe.Codec.AsObject[$name] = io.circe.Codec.forProduct${parameters.size}($arguments)($name.apply)(v => $tuple) \n}",
-                                element.context,
-                                element
-                            )
+                            val arguments = parameters.joinToString { "\"${it.specialName()}\"" }
+
+                            val companion = if (element.typeParameters.size > 0) {
+                                val encoderTypeParams = element.typeParameters.joinToString(
+                                    prefix = "[",
+                                    postfix = "]"
+                                ) { "${it.name}: io.circe.Encoder" }
+                                val decoderTypeParams = element.typeParameters.joinToString(
+                                    prefix = "[",
+                                    postfix = "]"
+                                ) { "${it.name}: io.circe.Decoder" }
+                                val typeParamsCall =
+                                    element.typeParameters.joinToString(prefix = "[", postfix = "]") { it.name!! }
+
+                                if (annotation.findAttributeValue("decodeOnly") != null) {
+                                    ScalaPsiElementFactory.createObjectWithContext(
+                                        "object $name {\n" +
+                                            "implicit def ${name.decapitalize()}Decoder$decoderTypeParams: io.circe.Decoder[$name$typeParamsCall] = io.circe.Decoder.forProduct${parameters.size}($arguments)($name$typeParamsCall)\n" +
+                                            "}",
+                                        element.context,
+                                        element
+                                    )
+                                } else {
+                                    ScalaPsiElementFactory.createObjectWithContext(
+                                        "object $name {\n" +
+                                            "implicit def ${name.decapitalize()}Encoder$encoderTypeParams: io.circe.Encoder.AsObject[$name$typeParamsCall] = io.circe.Encoder.forProduct${parameters.size}($arguments)(v => $tuple)\n" +
+                                            "implicit def ${name.decapitalize()}Decoder$decoderTypeParams: io.circe.Decoder[$name$typeParamsCall] = io.circe.Decoder.forProduct${parameters.size}($arguments)($name$typeParamsCall)\n" +
+                                            "}",
+                                        element.context,
+                                        element
+                                    )
+                                }
+                            } else {
+                                if (annotation.findAttributeValue("decodeOnly") != null) {
+                                    ScalaPsiElementFactory.createObjectWithContext(
+                                        "object $name {\n" +
+                                            "implicit val ${name.decapitalize()}Decoder: io.circe.Decoder[$name] = io.circe.Decoder.forProduct${parameters.size}($arguments)($name.apply)\n" +
+                                            "}",
+                                        element.context,
+                                        element
+                                    )
+                                } else {
+                                    ScalaPsiElementFactory.createObjectWithContext(
+                                        "object $name {\n" +
+                                            "implicit val ${name.decapitalize()}Encoder: io.circe.Encoder.AsObject[$name] = io.circe.Encoder.forProduct${parameters.size}($arguments)(v => $tuple)\n" +
+                                            "implicit val ${name.decapitalize()}Decoder: io.circe.Decoder[$name] = io.circe.Decoder.forProduct${parameters.size}($arguments)($name.apply)\n" +
+                                            "}",
+                                        element.context,
+                                        element
+                                    )
+                                }
+                            }
 
                             val baseCompanion = element.baseCompanion()
                             if (baseCompanion.isEmpty) {
                                 element.parent.addAfter(companion, element)
                             } else {
                                 val get = baseCompanion.get()
-                                get.addBefore(
-                                    CollectionConverters.SeqHasAsJava(companion.members()).asJava().first(),
-                                    CollectionConverters.SeqHasAsJava(get.members()).asJava().first()
-                                )
+                                CollectionConverters.SeqHasAsJava(companion.members()).asJava().reversed().forEach {
+                                    get.addBefore(
+                                        it,
+                                        CollectionConverters.SeqHasAsJava(get.members()).asJava().first()
+                                    )
+                                }
                             }
+
+                            annotation.delete()
                         }
                     }
                 )
