@@ -9,15 +9,15 @@ group = "io.dragnea"
 version = "0.4.0"
 
 intellij {
-    version.set("IC-2022.3.2")
+    version.set("IC-2023.1.1")
 
     plugins.set(
         listOf(
-            "PythonCore:223.8617.56",
-            "org.intellij.scala:2022.3.15",
+            "PythonCore:231.8770.65",
+            "org.intellij.scala:2023.1.16",
             "com.intellij.java",
             "org.jetbrains.kotlin",
-            "org.rust.lang:0.4.187.5175-223"
+            "org.rust.lang:0.4.193.5352-231"
         )
     )
 

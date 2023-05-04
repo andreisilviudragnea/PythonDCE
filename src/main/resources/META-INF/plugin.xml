@@ -10,7 +10,7 @@
       Inspections for detecting potentially dead code and intentions for generating boilerplate code.
     ]]></description>
 
-    <idea-version since-build="223.0"/>
+    <idea-version since-build="231.0"/>
 
     <depends>com.intellij.modules.python</depends>
     <depends>org.intellij.scala</depends>
