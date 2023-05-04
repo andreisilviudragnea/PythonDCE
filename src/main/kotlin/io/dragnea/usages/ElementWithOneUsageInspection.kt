@@ -49,8 +49,11 @@ class ElementWithOneUsageInspection : LocalInspectionTool() {
             element.parent?.parent is RsMatchArm && return
 
             if (element.usages().size == 1) {
+                val nameIdentifier = element.nameIdentifier ?: return
+                if (!nameIdentifier.isPhysical) return // TODO: Check isPhysical false
+
                 holder.registerProblem(
-                    element.nameIdentifier ?: return, // TODO: Fix isPhysical false
+                    nameIdentifier,
                     "Element has only one usage and can be inlined",
                     ProblemHighlightType.GENERIC_ERROR_OR_WARNING
                 )
