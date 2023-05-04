@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.dragnea"
-version = "0.4.0"
+version = "0.4.1"
 
 intellij {
     version.set("IC-2023.1.1")
