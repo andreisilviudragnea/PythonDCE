@@ -14,8 +14,7 @@ import com.pythondce.util.PythonDCEBundle
 import java.util.Locale
 import javax.swing.JComponent
 
-private fun PyClass.hasAtLeastOneUsage() =
-    hasOneUsage() || findMethodByName(PyNames.INIT, false, null)?.hasOneUsage() == true
+private fun PyClass.hasAtLeastOneUsage() = hasOneUsage() || findMethodByName(PyNames.INIT, false, null)?.hasOneUsage() == true
 
 class PyUnusedClassInspection : PyInspection() {
     var ignoreTestClasses = true
@@ -25,7 +24,7 @@ class PyUnusedClassInspection : PyInspection() {
     override fun buildVisitor(
         holder: ProblemsHolder,
         isOnTheFly: Boolean,
-        session: LocalInspectionToolSession
+        session: LocalInspectionToolSession,
     ): PsiElementVisitor =
         object : PyInspectionVisitor(holder, getContext(session)) {
             override fun visitPyClass(node: PyClass) {
@@ -40,7 +39,7 @@ class PyUnusedClassInspection : PyInspection() {
                     node.nameIdentifier ?: return,
                     PythonDCEBundle.message("INSP.unused.class", name),
                     ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                    PyRemoveClassQuickFix()
+                    PyRemoveClassQuickFix(),
                 )
             }
         }

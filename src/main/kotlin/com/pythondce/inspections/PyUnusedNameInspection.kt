@@ -13,8 +13,9 @@ import com.jetbrains.python.psi.PyAssignmentStatement
 import com.jetbrains.python.psi.PyTargetExpression
 import com.pythondce.util.PythonDCEBundle
 
-private fun PyTargetExpression.isGlobalAssignment(): Boolean = parent is PyAssignmentStatement &&
-    parent.parent is PsiFile
+private fun PyTargetExpression.isGlobalAssignment(): Boolean =
+    parent is PyAssignmentStatement &&
+        parent.parent is PsiFile
 
 class PyUnusedNameInspection : PyInspection() {
     override fun getDisplayName(): String = PythonDCEBundle.message("INSP.NAME.unused.name")
@@ -22,7 +23,7 @@ class PyUnusedNameInspection : PyInspection() {
     override fun buildVisitor(
         holder: ProblemsHolder,
         isOnTheFly: Boolean,
-        session: LocalInspectionToolSession
+        session: LocalInspectionToolSession,
     ): PsiElementVisitor =
         object : PyInspectionVisitor(holder, getContext(session)) {
             override fun visitPyTargetExpression(node: PyTargetExpression) {
@@ -35,7 +36,7 @@ class PyUnusedNameInspection : PyInspection() {
                         node.nameIdentifier ?: return,
                         PythonDCEBundle.message("INSP.unused.name", name),
                         ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        PyRemoveStatementQuickFix()
+                        PyRemoveStatementQuickFix(),
                     )
                 }
             }

@@ -13,8 +13,9 @@ import com.jetbrains.python.psi.PyTargetExpression
 
 internal fun PsiElement.usages(): Collection<PsiReference> = ReferencesSearch.search(this).findAll()
 
-internal fun PyTargetExpression.isClassAssignment(): Boolean = parent is PyAssignmentStatement &&
-    parent.parent is PyStatementList && parent.parent.parent is PyClass
+internal fun PyTargetExpression.isClassAssignment(): Boolean =
+    parent is PyAssignmentStatement &&
+        parent.parent is PyStatementList && parent.parent.parent is PyClass
 
 internal fun PsiReference.isUnqualifiedReferenceExpressionInMethodBlock(): Boolean {
     val referenceExpression = element as? PyReferenceExpression ?: return false
@@ -23,7 +24,7 @@ internal fun PsiReference.isUnqualifiedReferenceExpressionInMethodBlock(): Boole
 }
 
 internal fun PyTargetExpression.filterOutUnqualifiedReferencesToNameDefinedInClassBlockFromMethodBlocks(
-    references: Collection<PsiReference>
+    references: Collection<PsiReference>,
 ): Collection<PsiReference> {
     if (!isClassAssignment()) {
         return references

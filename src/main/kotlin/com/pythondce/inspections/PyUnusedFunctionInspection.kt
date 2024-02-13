@@ -17,9 +17,10 @@ import com.pythondce.util.PythonDCEBundle
 import java.util.Locale
 import javax.swing.JComponent
 
-private fun PyFunction.hasAtLeastOneUsage(): Boolean = hasOneUsage() ||
-    PySuperMethodsSearch.search(this, true, TypeEvalContext.userInitiated(project, null)).findAll()
-        .any { it is PyFunction && it.hasOneUsage() }
+private fun PyFunction.hasAtLeastOneUsage(): Boolean =
+    hasOneUsage() ||
+        PySuperMethodsSearch.search(this, true, TypeEvalContext.userInitiated(project, null)).findAll()
+            .any { it is PyFunction && it.hasOneUsage() }
 
 class PyUnusedFunctionInspection : PyInspection() {
     var ignoreTestFunctions = true
@@ -29,7 +30,7 @@ class PyUnusedFunctionInspection : PyInspection() {
     override fun buildVisitor(
         holder: ProblemsHolder,
         isOnTheFly: Boolean,
-        session: LocalInspectionToolSession
+        session: LocalInspectionToolSession,
     ): PsiElementVisitor =
         object : PyInspectionVisitor(holder, getContext(session)) {
             override fun visitPyFunction(node: PyFunction) {
@@ -47,7 +48,7 @@ class PyUnusedFunctionInspection : PyInspection() {
                     node.nameIdentifier ?: return,
                     PythonDCEBundle.message("INSP.unused.function", name),
                     ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                    PyRemoveFunctionQuickFix()
+                    PyRemoveFunctionQuickFix(),
                 )
             }
         }

@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.17.1"
     java
     kotlin("jvm") version "1.9.22"
-    id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
 group = "io.dragnea"
@@ -17,8 +17,8 @@ intellij {
             "org.intellij.scala:2023.1.16",
             "com.intellij.java",
             "org.jetbrains.kotlin",
-            "org.rust.lang:0.4.193.5352-231"
-        )
+            "org.rust.lang:0.4.193.5352-231",
+        ),
     )
 
     updateSinceUntilBuild.set(false)
