@@ -34,7 +34,11 @@ import com.pythondce.util.PythonDCEBundle
 class PyGenerateInitIntention : PyBaseIntentionAction() {
     override fun getFamilyName(): String = PythonDCEBundle.message("INTN.generate.init")
 
-    override fun isAvailable(project: Project, editor: Editor, file: PsiFile): Boolean {
+    override fun isAvailable(
+        project: Project,
+        editor: Editor,
+        file: PsiFile,
+    ): Boolean {
         if (file !is PyFile) {
             return false
         }
@@ -47,25 +51,32 @@ class PyGenerateInitIntention : PyBaseIntentionAction() {
         return true
     }
 
-    override fun doInvoke(project: Project, editor: Editor, file: PsiFile) {
-        val pyClass = PsiTreeUtil.getParentOfType(
-            file.findElementAt(editor.caretModel.offset),
-            PyClass::class.java,
-            false
-        ) ?: return
+    override fun doInvoke(
+        project: Project,
+        editor: Editor,
+        file: PsiFile,
+    ) {
+        val pyClass =
+            PsiTreeUtil.getParentOfType(
+                file.findElementAt(editor.caretModel.offset),
+                PyClass::class.java,
+                false,
+            ) ?: return
         val context = TypeEvalContext.userInitiated(file.project, file)
-        val classAttributesNamesAndTypes = pyClass.classAttributes.map {
-            Pair(it.name ?: return, PythonDocumentationProvider.getTypeName(context.getType(it), context))
-        }
+        val classAttributesNamesAndTypes =
+            pyClass.classAttributes.map {
+                Pair(it.name ?: return, PythonDocumentationProvider.getTypeName(context.getType(it), context))
+            }
         val parameters = mutableListOf(PyNames.CANONICAL_SELF)
         parameters.addAll(classAttributesNamesAndTypes.map { "${it.first}: ${it.second}" })
         val methodRows = mutableListOf("def ${PyNames.INIT}(${parameters.joinToString()}):")
         methodRows.addAll(classAttributesNamesAndTypes.map { "${PyNames.CANONICAL_SELF}.${it.first}: ${it.second} = ${it.first}" })
-        val initMethod = PyElementGenerator.getInstance(project).createFromText(
-            LanguageLevel.PYTHON36,
-            PyFunction::class.java,
-            methodRows.joinToString(separator = "\n    ")
-        )
+        val initMethod =
+            PyElementGenerator.getInstance(project).createFromText(
+                LanguageLevel.PYTHON36,
+                PyFunction::class.java,
+                methodRows.joinToString(separator = "\n    "),
+            )
         pyClass.statementList.add(initMethod)
     }
 }

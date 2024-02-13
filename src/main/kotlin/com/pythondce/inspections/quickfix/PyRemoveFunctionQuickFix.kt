@@ -10,7 +10,10 @@ import com.pythondce.util.PythonDCEBundle
 class PyRemoveFunctionQuickFix : LocalQuickFix {
     override fun getFamilyName(): String = PythonDCEBundle.message("QFIX.NAME.remove.function")
 
-    override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+    override fun applyFix(
+        project: Project,
+        descriptor: ProblemDescriptor,
+    ) {
         PsiTreeUtil.getParentOfType(descriptor.psiElement, PyFunction::class.java, true)?.delete()
     }
 }

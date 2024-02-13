@@ -12,8 +12,7 @@ import com.jetbrains.python.psi.types.PyCallableParameter
 import com.pythondce.inspections.quickfix.PyParameterToLocalQuickFix
 import com.pythondce.util.PythonDCEBundle
 
-private fun PyFunction.calls(): List<PyCallExpression> =
-    usages().map { it.element.parent }.filterIsInstance<PyCallExpression>()
+private fun PyFunction.calls(): List<PyCallExpression> = usages().map { it.element.parent }.filterIsInstance<PyCallExpression>()
 
 private const val NOT_CONSTANT = "NOT_CONSTANT"
 
@@ -23,7 +22,7 @@ class PySameParameterValueInspection : PyInspection() {
     override fun buildVisitor(
         holder: ProblemsHolder,
         isOnTheFly: Boolean,
-        session: LocalInspectionToolSession
+        session: LocalInspectionToolSession,
     ): PsiElementVisitor {
         return object : PyInspectionVisitor(holder, getContext(session)) {
             override fun visitPyFunction(node: PyFunction) {
@@ -49,9 +48,9 @@ class PySameParameterValueInspection : PyInspection() {
                             PythonDCEBundle.message(
                                 "inspection.same.parameter.problem.descriptor",
                                 parameterName,
-                                constant
+                                constant,
                             ),
-                            PyParameterToLocalQuickFix(parameterName, constant)
+                            PyParameterToLocalQuickFix(parameterName, constant),
                         )
                     }
             }

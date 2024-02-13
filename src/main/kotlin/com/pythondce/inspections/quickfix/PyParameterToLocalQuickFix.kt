@@ -20,16 +20,20 @@ class PyParameterToLocalQuickFix(private val parameterName: String, private val 
             PythonDCEBundle.bundle,
             "inspection.same.parameter.fix.name",
             parameterName,
-            constant
+            constant,
         )
     }
 
-    override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+    override fun applyFix(
+        project: Project,
+        descriptor: ProblemDescriptor,
+    ) {
         val pyParameter = descriptor.psiElement as? PyParameter ?: return
         val statementsList = (pyParameter.parent.parent as PyFunction).statementList
-        val assignment = PyElementGenerator
-            .getInstance(project)
-            .createFromText(LanguageLevel.PYTHON36, PyAssignmentStatement::class.java, "$parameterName = $constant")
+        val assignment =
+            PyElementGenerator
+                .getInstance(project)
+                .createFromText(LanguageLevel.PYTHON36, PyAssignmentStatement::class.java, "$parameterName = $constant")
         addElementToStatementList(assignment, statementsList, true)
     }
 }
